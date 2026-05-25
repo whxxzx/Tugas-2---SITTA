@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Stok Bahan Ajar</title>
+
+<link rel="stylesheet" href="css/style.css">
+ <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet">
+
+
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+
+<header class="sidebar-header">
+
+<a href="#" class="header-logo">
+<img src="assets/img/img/logout.png">
+</a>
+
+<button class="toggler sidebar-toggler">
+<span class="material-symbols-rounded">chevron_left</span>
+</button>
+
+<button class="toggler menu-toggler">
+<span class="material-symbols-rounded">menu</span>
+</button>
+
+</header>
+
+<nav class="sidebar-nav">
+
+<ul class="nav-list primary-nav">
+
+<!-- DASHBOARD -->
+<li class="nav-item">
+<a href="dashboard.html" class="nav-link">
+
+<span class="nav-icon material-symbols-rounded">
+dashboard
+</span>
+
+<span class="nav-label">
+Dashboard
+</span>
+
+</a>
+</li>
+
+<!-- STOK -->
+<li class="nav-item">
+<a href="stok.html" class="nav-link">
+
+<span class="nav-icon material-symbols-rounded">
+menu_book
+</span>
+
+<span class="nav-label">
+Informasi Bahan Ajar
+</span>
+
+</a>
+</li>
+
+<!-- TRACKING -->
+<li class="nav-item">
+<a href="tracking.html" class="nav-link">
+
+<span class="nav-icon material-symbols-rounded">
+local_shipping
+</span>
+
+<span class="nav-label">
+Tracking Pengiriman
+</span>
+
+</a>
+</li>
+
+<!-- SUBMENU -->
+<li class="nav-item has-submenu">
+
+<div class="nav-link" onclick="toggleSubmenu()">
+
+<span class="material-symbols-rounded">
+assessment
+</span>
+
+<span class="nav-label">
+Laporan
+</span>
+
+<span class="arrow material-symbols-rounded">
+expand_more
+</span>
+
+</div>
+
+<ul id="submenuLaporan" class="submenu">
+
+<li>
+<a href="#">Monitoring Progress DO</a>
+</li>
+
+<li>
+<a href="#">Rekap Bahan Ajar</a>
+</li>
+
+</ul>
+
+</li>
+
+<!-- HISTORI -->
+<li class="nav-item">
+
+<a href="#" class="nav-link" onclick="openModal2()">
+
+<span class="nav-icon material-symbols-rounded">
+history
+</span>
+
+<span class="nav-label">
+Histori Transaksi
+</span>
+
+</a>
+</li>
+
+<!-- LOGOUT -->
+<li class="nav-item logout-item">
+
+  <a href="#" class="nav-link logout-link"
+     onclick="logout()">
+
+    <span class="nav-icon material-symbols-rounded">
+      logout
+    </span>
+
+    <span class="nav-label">
+      Logout
+    </span>
+
+  </a>
+
+</li>
+</ul>
+</nav>
+</aside>
+
+
+<!-- CONTENT -->
+<!-- MAIN CONTENT -->
+<main class="content">
+
+    <h2 id="greeting"></h2>
+    <button class="dark-btn "  onclick="toggleDarkMode()">Dark Mode</button>
+  
+<div id="stockApp" class="container">
+  
+        <h2>Informasi Stok Bahan Ajar</h2>
+
+        <div class="filter-container">
+            <div class="select-filter">
+                <h4>Filter</h4>
+                <select v-model="selectedUpbjj">
+                    <option value="">Pilih UPBJJ</i></option>
+                    <option v-for="(u, i) in upbjjList" :key="i">{{ u }}</option>
+                </select>
+
+                <select v-model="selectedKategori" :disabled="!selectedUpbjj" :style="{ backgroundColor: !selectedUpbjj ? '#f0f0f0' : '#d9d8d4', cursor: !selectedUpbjj ? 'not-allowed' : 'pointer' }">
+                    <option value="">Semua Kategori</option>
+                    <option v-for="(k, i) in kategoriListFiltered" :key="i">{{ k }}</option>
+                </select>
+                <select v-model="sortBy">
+                    <option value="">Urutkan berdasarkan</option>
+                    <option value="judul">Judul</option>
+                    <option value="qty">Jumlah</option>
+                    <option value="harga">Harga</option>
+                </select>
+                
+                <button @click="resetFilter" class="reset-filter-btn"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+            </div>
+
+            <div class="checkbox-filter">
+                <input type="checkbox" v-model="isSafety"> Tampilkan stok menipis / kosong
+            </div>
+            
+        </div>
+        <button style="width: 20% !important;" class="find-button" @click="openAddModal"><i class="fa fa-plus" aria-hidden="true"></i> Tambah Bahan Ajar</button>
+
+        <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Kode</th>
+                    <th>Judul</th>
+                    <th>Kategori</th>
+                    <th>UPBJJ</th>
+                    <th>Lokasi Rak</th>
+                    <th>Harga</th>
+                    <th>Jumlah</th>
+                    <th>Status</th>
+                    <th>Catatan</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="item in filteredData" :key="item.kode">
+                    <td>{{ item.kode }}</td>
+                    <td>{{ item.judul }}</td>
+                    <td>{{ item.kategori }}</td>
+                    <td>{{ item.upbjj }}</td>
+                    <td>{{ item.lokasiRak }}</td>
+                    <td>{{ item.harga }}</td>
+                    <td>{{ item.qty }}</td>
+                    <td :class="statusKelas(item)">
+                        {{ statusText(item) }}
+                    </td>
+                    <td v-html="item.catatanHTML"></td>
+                    <td style="display: flex; gap:5px;">
+    
+    <button @click="showDetail(item)" class="detail">
+        <i class="fa fa-eye" aria-hidden="true"></i>
+    </button>
+
+    <button @click="editItem(item)" class="edit">
+        <i class="fa fa-pencil" aria-hidden="true"></i>
+    </button>
+
+    <button @click="deleteItem(item)" class="delete">
+        <i class="fa fa-trash-o" aria-hidden="true"></i>
+    </button>
+
+</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+<!-- POPUP -->
+<!-- POPUP MODAL -->
+<div id="devModal" class="modal2">
+  <div class="modal-content2">
+    <p>🚧 Fitur sedang dalam pengembangan</p>
+    <button onclick="closeModal2()">OK</button>
+  </div>
+</div>
+
+  <script src="https://unpkg.com/vue@3.4.38/dist/vue.global.prod.js"></script>
+    <script src="js/dataBahanAjar.js"></script>
+    <script src="js/stock-app.js"></script>
+ <script src="js/data.js"></script>
+<script src="js/script.js"></script>
+
+</body>
+</html>

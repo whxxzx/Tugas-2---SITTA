@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tracking Pengiriman</title>
+
+<link rel="stylesheet" href="css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+    <!-- Sidebar header -->
+    <header class="sidebar-header">
+      <a href="#" class="header-logo">
+        <img src="assets/img/img/logout.png" alt="CodingNepal">
+      </a>
+      <button class="toggler sidebar-toggler">
+        <span class="material-symbols-rounded">chevron_left</span>
+      </button>
+      <button class="toggler menu-toggler">
+        <span class="material-symbols-rounded">menu</span>
+      </button>
+    </header>
+    <nav class="sidebar-nav">
+      <!-- Primary top nav -->
+      <ul class="nav-list primary-nav">
+
+        <li class="nav-item">
+    <a href="dashboard.html" class="nav-link">
+      <span class="nav-icon material-symbols-rounded">Dashboard</span>
+      <span class="nav-label">Dashboard</span>
+    </a>
+  </li>
+  <!-- INFORMASI BAHAN AJAR -->
+  <li class="nav-item">
+    <a href="stok.html" class="nav-link">
+      <span class="nav-icon material-symbols-rounded">menu_book</span>
+      <span class="nav-label">Informasi Bahan Ajar</span>
+    </a>
+  </li>
+
+  <!-- TRACKING -->
+  <li class="nav-item">
+    <a href="tracking.html" class="nav-link">
+      <span class="nav-icon material-symbols-rounded">local_shipping</span>
+      <span class="nav-label">Tracking Pengiriman</span>
+    </a>
+  </li>
+
+  <!-- LAPORAN (PUNYA SUBMENU) -->
+  <li class="nav-item">
+
+    
+
+    <!-- SUBMENU -->
+     <ul>
+    <li class="nav-item has-submenu">
+
+  <div class="nav-link" onclick="toggleSubmenu()">
+    <span class="material-symbols-rounded">assessment</span>
+    <span class="nav-label">Laporan</span>
+
+    <!-- PANAH -->
+    <span class="arrow material-symbols-rounded">expand_more</span>
+  </div>
+
+  <ul id="submenuLaporan" class="submenu">
+    <li><a href="#">Monitoring Progress DO</a></li>
+    <li><a href="#">Rekap Bahan Ajar</a></li>
+  </ul>
+
+</li>
+  </ul>
+
+</li>
+
+  </li>
+
+  <!-- HISTORI -->
+  <li class="nav-item">
+    <a href="#" class="nav-link" onclick="openModal2()">
+      <span class="nav-icon material-symbols-rounded">history</span>
+      <span class="nav-label">Histori Transaksi</span>
+    </a>
+  </li>
+
+<!-- LOGOUT -->
+<li class="nav-item logout-item">
+
+  <a href="#" class="nav-link logout-link"
+     onclick="logout()">
+
+    <span class="nav-icon material-symbols-rounded">
+      logout
+    </span>
+
+    <span class="nav-label">
+      Logout
+    </span>
+
+  </a>
+
+</li>
+
+</ul>
+    </nav>
+  </aside>
+
+<!-- CONTENT -->
+<main class="content">
+  <div id="trackingApp">
+        <div class="tracking-container">
+            <h2>Tracking DO</h2>
+            <form @submit.prevent="submitDO" class="form-do">
+                <label>Nomor DO:</label>
+                <input type="text" v-model="newDO.nomorDO" disabled />
+            
+                <label>NIM:</label>
+                <input type="text" v-model="newDO.nim"/>
+            
+                <label>Nama:</label>
+                <input type="text" v-model="newDO.nama"/>
+            
+                <div class="filter-container" style="justify-content: start !important;">
+                    <div>
+                        <label style="margin-right: 12px;">Ekspedisi:</label>
+                        <select v-model="newDO.ekspedisi">
+                            <option disabled value="">Pilih Ekspedisi</option>
+                            <option v-for="(exp, i) in pengirimanList" :key="i" :value="exp.nama">
+                                {{ exp.nama }}
+                            </option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label style="margin-right: 12px;">Paket Bahan Ajar:</label>
+                        <select v-model="newDO.paket">
+                            <option disabled value="">Pilih Paket</option>
+                            <option v-for="(p, i) in paketList" :key="i" :value="p.kode">
+                                {{ p.kode }} - {{ p.nama }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="date-do">
+                        <label style="margin-right: 12px;">Tanggal Kirim:</label>
+                        <input type="date" v-model="newDO.tanggalKirim" style="font-size: 12px;" />
+                    </div>
+                </div>
+            
+                <!-- Detail Paket -->
+                <div v-if="selectedPaket" class="paket-detail">
+                    <h4>Detail Isi Paket:</h4>
+                    <ol>
+                        <li v-for="(item, i) in selectedPaket.isi" :key="i">{{ item }}</li>
+                    </ol>
+                    <p><b>Total Harga:</b> Rp {{ selectedPaket.harga.toLocaleString('id-ID') }}</p>
+                </div>
+            
+            
+                <button type="submit" class="find-button">Tambah DO baru</button>
+            </form>
+        </div>
+
+        <div class="tracking-table">
+            <h3>Daftar Tracking DO</h3>
+
+            <div class="search-container">
+
+    <input 
+        type="text"
+        v-model="searchQuery"
+        placeholder="Cari nomor DO, nama, NIM, paket..."
+    >
+
+</div>
+            <table>
+                <thead>
+    <tr>
+        <th>Nomor DO</th>
+        <th>NIM</th>
+        <th>Nama</th>
+        <th>Ekspedisi</th>
+        <th>Paket</th>
+        <th>Tanggal Kirim</th>
+        <th>Total</th>
+        <th>Status</th>
+        <th>Aksi</th>
+    </tr>
+</thead>
+              <tbody>
+    <tr v-for="[key, item] in filteredTracking" :key="key">
+
+        <td>{{ key }}</td>
+        <td>{{ item.nim }}</td>
+        <td>{{ item.nama }}</td>
+        <td>{{ item.ekspedisi }}</td>
+        <td>{{ item.paket }}</td>
+        <td>{{ item.tanggalKirim }}</td>
+        <td>Rp {{ item.total.toLocaleString('id-ID') }}</td>
+
+        <td>
+            <span :class="statusClass(item.status)">
+                {{ item.status }}
+            </span>
+        </td>
+
+        <td>
+
+            <button 
+                class="btn-detail-tracking"
+                @click="showTrackingDetail(key,item)"
+            >
+                <i class="fa fa-eye"></i>
+            </button>
+
+        </td>
+
+    </tr>
+
+    <tr v-if="filteredTracking.length === 0">
+
+    <td colspan="9">
+
+        <div class="empty-state">
+            Data tidak ditemukan
+        </div>
+
+    </td>
+
+</tr>
+</tbody>
+            </table>
+        </div>
+
+
+    <div id="trackingResult" class="tracking-result"></div>
+
+    <script src="https://unpkg.com/vue@3.4.38/dist/vue.global.prod.js"></script>
+    <script src="js/dataBahanAjar.js"></script>
+    <script src="js/tracking-app.js"></script>
+    <script src="js/data.js"></script>
+<script src="js/script.js"></script>
+
+<div id="devModal" class="modal2">
+  <div class="modal-content2">
+    <p>🚧 Fitur sedang dalam pengembangan</p>
+    <button onclick="closeModal2()">OK</button>
+  </div>
+</div>
+  </div>
+</main>
+
+
+</body>
+</html>

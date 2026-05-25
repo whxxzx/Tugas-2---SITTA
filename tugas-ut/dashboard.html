@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard SITTA</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0">
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+    <!-- Sidebar header -->
+    <header class="sidebar-header">
+      <a href="#" class="header-logo">
+        <img src="assets/img/img/logout.png" alt="CodingNepal">
+      </a>
+      <button class="toggler sidebar-toggler">
+        <span class="material-symbols-rounded">chevron_left</span>
+      </button>
+      <button class="toggler menu-toggler">
+        <span class="material-symbols-rounded">menu</span>
+      </button>
+    </header>
+    <nav class="sidebar-nav">
+      <!-- Primary top nav -->
+      <ul class="nav-list primary-nav">
+
+        <li class="nav-item">
+    <a href="dashboard.html" class="nav-link">
+      <span class="nav-icon material-symbols-rounded">Dashboard</span>
+      <span class="nav-label">Dashboard</span>
+    </a>
+  </li>
+  <!-- INFORMASI BAHAN AJAR -->
+  <li class="nav-item">
+    <a href="stok.html" class="nav-link">
+      <span class="nav-icon material-symbols-rounded">menu_book</span>
+      <span class="nav-label">Informasi Bahan Ajar</span>
+    </a>
+  </li>
+
+  <!-- TRACKING -->
+  <li class="nav-item">
+    <a href="tracking.html" class="nav-link">
+      <span class="nav-icon material-symbols-rounded">local_shipping</span>
+      <span class="nav-label">Tracking Pengiriman</span>
+    </a>
+  </li>
+
+ <li class="nav-item has-submenu">
+
+  <div class="nav-link" onclick="toggleSubmenu()">
+
+    <span class="material-symbols-rounded">
+      assessment
+    </span>
+
+    <span class="nav-label">
+      Laporan
+    </span>
+
+    <span class="arrow material-symbols-rounded">
+      expand_more
+    </span>
+
+  </div>
+
+  <ul id="submenuLaporan" class="submenu">
+
+    <li>
+      <a href="#">Monitoring Progress DO</a>
+    </li>
+
+    <li>
+      <a href="#">Rekap Bahan Ajar</a>
+    </li>
+
+  </ul>
+
+</li>
+
+  </li>
+
+  <!-- HISTORI -->
+  <li class="nav-item">
+    <a href="#" class="nav-link" onclick="openModal2()">
+      <span class="nav-icon material-symbols-rounded">history</span>
+      <span class="nav-label">Histori Transaksi</span>
+    </a>
+  </li>
+
+<!-- LOGOUT -->
+<li class="nav-item logout-item">
+
+  <a href="#" class="nav-link logout-link"
+   onclick="logout()">
+
+    <span class="nav-icon material-symbols-rounded">
+      logout
+    </span>
+
+    <span class="nav-label">
+      Logout
+    </span>
+
+  </a>
+
+</li>
+
+</ul>
+    </nav>
+  </aside>
+
+<!-- MAIN CONTENT -->
+ 
+<div class="main">
+  <!-- HEADER -->
+  <div class="header">
+    <h2 id="greeting"></h2>
+    <button class="dark-btn "  onclick="toggleDarkMode()">Dark Mode</button>
+  </div>
+</div>
+  
+<!-- POPUP -->
+<!-- POPUP MODAL -->
+<div id="devModal" class="modal2">
+  <div class="modal-content2">
+    <p>🚧 Fitur sedang dalam pengembangan</p>
+    <button onclick="closeModal2()">OK</button>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/script.js"></script>
+
+
+
+</body>
+</html>

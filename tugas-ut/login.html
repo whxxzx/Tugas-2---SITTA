@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Login SITTA</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet">
+</head>
+<body>
+<!-- POPUP LOGIN -->
+<div id="popupLogin" class="popup-login">
+
+  <div class="popup-card">
+
+    <div id="popupIcon" class="popup-icon">
+      ✓
+    </div>
+
+    <h2 id="popupTitle">Berhasil</h2>
+
+    <p id="popupMessage">
+      Login berhasil!
+    </p>
+
+    <button id="popupButton" onclick="closePopup()">
+      Lanjutkan
+    </button>
+
+  </div>
+
+</div>
+
+<div class="login-wrapper">
+  <div class="login-card">
+
+    <!-- LOGO -->
+    <div class="logo-area">
+      <img src="assets/img/img/logout.png" alt="logo ut">
+      <h2>SITTA Login</h2>
+    </div>
+
+    <!-- EMAIL -->
+<div class="input-group">
+  <input 
+    type="email" 
+    id="email" 
+    placeholder="Masukkan Email"
+    required
+  >
+</div>
+
+<!-- PASSWORD -->
+<div class="input-group">
+  <input 
+    type="password" 
+    id="password" 
+    placeholder="Masukkan Password"
+    required>
+
+  <span class="toggle-pass" onclick="togglePass()"></span>
+
+  <p class="link" style="margin-top:10px;"
+     onclick="openModal('lupaModal')">
+     Lupa Password?
+  </p>
+</div>
+
+    <button onclick="login()" class="btn-login">Login</button>
+
+    <!-- LINK -->
+    <div class="link-group">
+      <p class="link" onclick="openModal('daftarModal')">Daftar Akun</p>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- MODAL LUPA PASSWORD -->
+<div id="lupaModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('lupaModal')">&times;</span>
+
+    <h3>Lupa Password</h3>
+
+    <input type="email" id="emailLupa" placeholder="Masukkan Email">
+
+    <button type="button" onclick="kirimLupaPassword()">Kirim</button>
+
+  </div>
+</div>
+
+<!-- MODAL DAFTAR -->
+<div id="daftarModal" class="modal">
+  <div class="modal-content">
+    <span onclick="closeModal('daftarModal')">&times;</span>
+    <h3>Daftar</h3>
+    <input placeholder="Nama">
+    <input placeholder="Email">
+    <input placeholder="Password">
+    <button>Daftar</button>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/script.js"></script>
+
+
+
+</body>
+</html>
